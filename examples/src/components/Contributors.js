@@ -19,6 +19,7 @@ const Contributors = createClass({
 		};
 	},
 	onChange (value) {
+		window.open('http://www.google.com', '_blank');
 		this.setState({
 			value: value,
 		});
@@ -35,55 +36,42 @@ const Contributors = createClass({
 			value: this.state.value[0],
 		});
 	},
+
 	getContributors (input, callback) {
 		console.log(input);
 		input = input.toLowerCase();
-		var options = CONTRIBUTORS.filter(i => {
-			return i.github.substr(0, input.length) === input;
-		});
-		var data = {
-			options: options.slice(0, MAX_CONTRIBUTORS),
-			complete: options.length <= MAX_CONTRIBUTORS,
-		};
+		if(input.length >3)
+		{
+		    setTimeout(function() {
 
-		var data = {
-			options: options.slice(0, MAX_CONTRIBUTORS),
-			complete: options.length <= MAX_CONTRIBUTORS,
-		};
+			var that = this;
+			var url = 'http://localhost:8888/suggest?prefix=' + input;
+			var request = new Request(url, {
+				method: 'GET',
+				mode: 'cors', 
+				redirect: 'follow',
+				headers: new Headers({
+					'Access-Control-Allow-Origin': '*'
+				})});
 
-		setTimeout(function() {
-
-		var that = this;
-		  var url = 'http://localhost:8888/suggest?prefix=fac';
-		var request = new Request(url, {
-			method: 'GET',
-			mode: 'no-cors', 
-			redirect: 'follow',
-			headers: new Headers({
-				'Access-Control-Allow-Origin': '*'
-			})});
-
-		  fetch(request)
-		  .then(function(response) {
-		    return response.json();
-		  })
-		  .then(function(data2) {
-		  	var data3 = {
-			options: data2.entities,
-			complete: false,
-		    };
-		  	console.log(data3);
-		  	console.log(data);
-		  	callback(null, data);
-		    //that.setState({ person: data.person });
-		  })
+			  fetch(url)
+			  .then(function(response) {
+			    return response.json();
+			  })
+			  .then(function(data2) {
+			  	var data3 = {
+				options: data2.entities,
+				complete: false,
+			    };
+			  	console.log(data3);
+			 // 	console.log(data);
+			  	callback(null, data3);
+			    //that.setState({ person: data.person });
+			  })
 
 
-		}, ASYNC_DELAY);
-	},
-
-	logChange(val) {
-  		console.log("Selected Yagna: " + JSON.stringify(val));
+			}, ASYNC_DELAY);
+		}
 	},
 
 	gotoContributor (value, event) {
@@ -94,7 +82,7 @@ const Contributors = createClass({
 		return (
 			<div className="section">
 				<h3 className="section-heading">{this.props.label}</h3>
-				<Select.Async multi={false} value={this.state.value} onChange={this.logChange} onValueClick={this.gotoContributor} valueKey="github" labelKey="name" loadOptions={this.getContributors} />
+				<Select.Async multi={false} value={this.state.value} onValueClick={this.gotoContributor} onChange={this.onChange} valueKey="github" labelKey="name" loadOptions={this.getContributors} />
 				<div className="hint">This example implements custom label and value properties, async options and opens the github profiles in a new window when values are clicked</div>
 			</div>
 		);
