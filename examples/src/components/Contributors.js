@@ -50,16 +50,14 @@ const Contributors = createClass({
 			options: options.slice(0, MAX_CONTRIBUTORS),
 			complete: options.length <= MAX_CONTRIBUTORS,
 		};
-		// setTimeout(function() {
-		// 	callback(null, data);
-		// }, ASYNC_DELAY);
 
 		setTimeout(function() {
 
 		var that = this;
 		  var url = 'http://localhost:8888/suggest?prefix=fac';
 		var request = new Request(url, {
-			method: 'GET', 
+			method: 'GET',
+			mode: 'no-cors', 
 			redirect: 'follow',
 			headers: new Headers({
 				'Access-Control-Allow-Origin': '*'
@@ -76,13 +74,16 @@ const Contributors = createClass({
 		    };
 		  	console.log(data3);
 		  	console.log(data);
-		  	callback(null, data3);
+		  	callback(null, data);
 		    //that.setState({ person: data.person });
 		  })
 
 
-
 		}, ASYNC_DELAY);
+	},
+
+	logChange(val) {
+  		console.log("Selected Yagna: " + JSON.stringify(val));
 	},
 
 	gotoContributor (value, event) {
@@ -93,7 +94,7 @@ const Contributors = createClass({
 		return (
 			<div className="section">
 				<h3 className="section-heading">{this.props.label}</h3>
-				<Select.Async multi={false} value={this.state.value} onChange={this.onChange} onValueClick={this.gotoContributor} valueKey="github" labelKey="name" loadOptions={this.getContributors} />
+				<Select.Async multi={false} value={this.state.value} onChange={this.logChange} onValueClick={this.gotoContributor} valueKey="github" labelKey="name" loadOptions={this.getContributors} />
 				<div className="hint">This example implements custom label and value properties, async options and opens the github profiles in a new window when values are clicked</div>
 			</div>
 		);
