@@ -19,7 +19,7 @@ const Contributors = createClass({
 		};
 	},
 	onChange (value) {
-		window.open('http://www.google.com', '_blank');
+		window.open(value.url, '_blank');
 		this.setState({
 			value: value,
 		});
@@ -76,14 +76,15 @@ const Contributors = createClass({
 
 	gotoContributor (value, event) {
 		window.open('https://github.com/' + value.github);
+		window.open(value.url, '_blank');
 	},
 
 	render () {
 		return (
 			<div className="section">
-				<h3 className="section-heading">{this.props.label}</h3>
-				<Select.Async multi={false} value={this.state.value} onValueClick={this.gotoContributor} onChange={this.onChange} valueKey="github" labelKey="name" loadOptions={this.getContributors} />
-				<div className="hint">This example implements custom label and value properties, async options and opens the github profiles in a new window when values are clicked</div>
+				<h3 className="section-heading">Search a domain</h3>
+				<Select.Async multi={false} value={this.state.value} onValueClick={this.gotoContributor} onChange={this.onChange} valueKey="url" labelKey="name" loadOptions={this.getContributors} />
+				<div className="hint"></div>
 			</div>
 		);
 	}

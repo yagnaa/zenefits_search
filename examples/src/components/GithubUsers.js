@@ -38,14 +38,19 @@ const GithubUsers = createClass({
 			return Promise.resolve({ options: [] });
 		}
 
-		return fetch(`https://api.github.com/search/users?q=${input}`)
+		return fetch(`http://localhost:8888/suggest?prefix=${input}`)
 		.then((response) => response.json())
-		.then((json) => {
-			return { options: json.items };
+		.then(function(data2) {
+			var data3 = {
+				options: data2.entities,
+				complete: false,
+			    };
+
+			return  data3;
 		});
 	},
 	gotoUser (value, event) {
-		window.open(value.html_url);
+		window.open(value.url);
 	},
 	toggleBackspaceRemoves () {
 		this.setState({
@@ -64,8 +69,8 @@ const GithubUsers = createClass({
 
 		return (
 			<div className="section">
-				<h3 className="section-heading">{this.props.label}</h3>
-				<AsyncComponent multi={this.state.multi} value={this.state.value} onChange={this.onChange} onValueClick={this.gotoUser} valueKey="id" labelKey="login" loadOptions={this.getUsers} backspaceRemoves={this.state.backspaceRemoves} />
+				<h3 className="section-heading">Search a Domain</h3>
+				<AsyncComponent multi={this.state.multi} onFocus={this.moveCaretAtEnd} value={this.state.value} onChange={this.onChange} onValueClick={this.gotoUser} valueKey="url" labelKey="name" loadOptions={this.getUsers} backspaceRemoves={this.state.backspaceRemoves} />
 				<div className="checkbox-list">
 					<label className="checkbox">
 						<input type="radio" className="checkbox-control" checked={this.state.multi} onChange={this.switchToMulti}/>
@@ -86,7 +91,7 @@ const GithubUsers = createClass({
 					   <span className="checkbox-label">Backspace Removes?</span>
 					</label>
 				</div>
-				<div className="hint">This example uses fetch.js for showing Async options with Promises</div>
+				<div className="hint"></div>
 			</div>
 		);
 	}

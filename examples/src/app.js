@@ -4,11 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Select from 'react-select';
 
-import Contributors from './components/Contributors';
+import GithubUsers from './components/GithubUsers';
 
 ReactDOM.render(
 	<div>
-		<Contributors label="Contributors (Async)" />
+		<GithubUsers label="Github users (Async with fetch.js)" />
 	</div>,
 	document.getElementById('example')
 );
